@@ -33,7 +33,7 @@ public class AssignmentController {
   // Returns an assignment DTO of the new assignment when successful.
   @PostMapping("/assignment/{course_id}/add")
   @Transactional
-  public AssignmentListDTO.AssignmentDTO addAssignment2(
+  public AssignmentListDTO.AssignmentDTO addAssignment(
       @PathVariable int course_id,
       @RequestBody AssignmentListDTO.AssignmentDTO assignment) {
 
