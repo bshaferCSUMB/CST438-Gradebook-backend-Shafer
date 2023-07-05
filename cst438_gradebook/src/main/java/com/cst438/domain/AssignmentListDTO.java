@@ -23,6 +23,10 @@ public class AssignmentListDTO {
 			this.courseTitle = courseTitle;
 		}
 
+		public AssignmentDTO(){ // Used for testing
+			super();
+		}
+
 		@Override
 		public String toString() {
 			return "[assignmentId=" + assignmentId + ", assignmentName=" + assignmentName + ", dueDate="
