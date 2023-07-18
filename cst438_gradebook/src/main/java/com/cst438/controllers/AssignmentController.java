@@ -18,6 +18,7 @@ import com.cst438.domain.Course;
 import com.cst438.domain.CourseRepository;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001"})
 public class AssignmentController {
 
   @Autowired

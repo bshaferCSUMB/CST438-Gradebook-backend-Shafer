@@ -3,6 +3,7 @@ package com.cst438.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import com.cst438.domain.EnrollmentDTO;
 import com.cst438.domain.EnrollmentRepository;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001"})
 public class EnrollmentController {
 
 	@Autowired
@@ -30,11 +32,29 @@ public class EnrollmentController {
 	@PostMapping("/enrollment")
 	@Transactional
 	public EnrollmentDTO addEnrollment(@RequestBody EnrollmentDTO enrollmentDTO) {
-		
-		//TODO  complete this method in homework 4
-		
-		return null;
-		
+
+		// Check for missing enrollmentDTO parameters.
+		if (enrollmentDTO.studentName == null || enrollmentDTO.studentEmail == null) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing student enrollment parameters.");
+		}
+
+		// Check the course exists in the database.
+		Course c = courseRepository.findById(enrollmentDTO.course_id).orElse(null);
+		if (c == null) {
+			throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Course id not found: " + enrollmentDTO.course_id);
+		}
+
+		// Create a new Enrollment object using the enrollmentDTO object from the request body
+		// and insert it into the database.
+		Enrollment enrollment = new Enrollment();
+		enrollment.setStudentName(enrollmentDTO.studentName);
+		enrollment.setStudentEmail(enrollmentDTO.studentEmail);
+		enrollment.setCourse(c);
+		enrollmentRepository.save(enrollment);
+		System.out.println("Saved new enrollment: " + enrollment);
+
+		enrollmentDTO.id = enrollment.getId();
+		return enrollmentDTO;
 	}
 
 }
